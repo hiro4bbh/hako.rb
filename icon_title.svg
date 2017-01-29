@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="450" height="200" viewBox="0 0 450 200">
+  <defs>
+    <pattern id="stripe" 
+      width="50" height="50" 
+      patternUnits="userSpaceOnUse"
+      patternTransform="rotate(45)">
+      <rect width="25" height="50" transform="translate(0,0)" fill="rgba(255, 255, 255, 0.08)"></rect>
+    </pattern>
+  </defs>
+  <g>
+    <rect width="140" height="140" x="30" y="30" fill="#9933cc" />
+    <rect width="55" height="10" x="40" y="40" fill="#cc99ff" />
+    <rect width="55" height="10" x="105" y="40" fill="#cc99ff" />
+    <rect width="55" height="10" x="40" y="80" fill="#cc99ff" />
+    <rect width="55" height="10" x="105" y="80" fill="#cc99ff" />
+    <rect width="55" height="10" x="40" y="120" fill="#cc99ff" />
+    <rect width="55" height="10" x="105" y="120" fill="#cc99ff" />
+    <rect width="140" height="140" x="30" y="30" fill="url(#stripe)" />
+  </g>
+  <g font-family="Helvetica Neue" font-size="72"><text x="200" y="136" fill="#9933cc"><tspan font-weight="100">hako.rb</tspan></text></g>
+</svg>
