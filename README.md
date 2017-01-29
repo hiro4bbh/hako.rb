@@ -27,7 +27,7 @@ You can use hako.rb on macOS from GitHub, as the following:
 git clone https://github.com/hiro4bbh/hako.rb
 cd hako.rb
 # You can use OpenBLAS optimized for your machine.
-brew install openblas --build-from-source
+brew install homebrew/science/openblas --build-from-source
 # Use latest Ruby (currently tested on version 2.4.0p0).
 brew install ruby
 # Install FFI for OpenBLAS interface.
