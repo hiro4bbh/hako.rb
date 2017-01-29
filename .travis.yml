@@ -3,5 +3,5 @@ language: ruby
 rvm:
   - 2.4.0
 before_install:
-  - brew install homebrew/science/openblas --build-from-source
+  - brew install homebrew/science/openblas
   - gem install ffi
