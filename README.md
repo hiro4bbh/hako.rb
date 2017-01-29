@@ -1,6 +1,8 @@
 # hako.rb - a simple data manipulation library written in Ruby
 ![hako.rb logo](https://rawgit.com/hiro4bbh/hako.rb/master/icon_title.svg)
 
+[![Build Status](https://travis-ci.org/hiro4bbh/hako.rb.svg?branch=master)](https://travis-ci.org/hiro4bbh/hako.rb)
+
 Copyright 2017- Tatsuhiro Aoshima (hiro4bbh@gmail.com).
 
 ## What is hako.rb?

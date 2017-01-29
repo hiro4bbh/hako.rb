@@ -1,7 +1,7 @@
+os: osx
 language: ruby
 rvm:
   - 2.4.0
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libopenblas-dev
+  - brew install openblas --build-from-source
   - gem install ffi
