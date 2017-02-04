@@ -171,14 +171,58 @@ class Matrix
     selft
   end
 
-  def collect_columns(js)
-    _A = Matrix::new(nrows, js.length)
-    js.each.with_index do |j, jo| (_A.p + jo*_A.nrows*8).__copy_from__(p + j*nrows*8, nrows*8) end
+  # ids returns row indices selected by _J if by_row is true, column indices
+  # otherwise.
+  #
+  # @param _I indices Array.
+  # @param by_row if this is true then returns row indices else returns
+  #               column indices.
+  def ids(_I=:*, by_row: true)
+    n = if by_row then nrows else ncols end
+    return (0..(n - 1)).to_a if _I == :*
+    case _I
+    when Array then
+      _I.collect do |j| ids(j, by_row: by_row) end.flatten(1)
+    when Range then
+      first = if _I.first < 0 then n + _I.first else _I.first end
+      last = if _I.last < 0 then n + _I.last else _I.last end
+      first.upto(last).collect do |i| i end
+    when Integer then
+      _I = n + _I if _I < 0
+      [_I]
+    else
+      raise "cannot support #{_J.class} index as #{if by_row then 'row' else 'column' end} index"
+    end
+  end
+  # rowids returns row indices selected by _J.
+  #
+  # @param _J indices Array.
+  def rowids(*_I)
+    ids(_I, by_row: true)
+  end
+  # Selects rows which block returns true or selected by _I if given.
+  #
+  # @param _I indices Array.
+  # TODO: Current implementation would be slow because using transpose 2 times.
+  def select(*_I)
+    self.t.project(*_I).t
+  end
+  # colids returns column indices selected by _J.
+  #
+  # @param _J indices Array.
+  def colids(*_J)
+    ids(_J, by_row: false)
+  end
+  # Projects self into columns selected by _J
+  #
+  # @param _J indices Array.
+  def project(*_J)
+    _J = colids(_J)
+    _A = Matrix::new(nrows, _J.length)
+    _J.each.with_index do |j, jo| (_A.p + jo*_A.nrows*8).__copy_from__(p + j*nrows*8, nrows*8) end
     _A
   end
-  def collect_rows(is)
-    self.t.collect_columns(is).t
-  end
+
   def colsums
     v = Vector.new(ncols)
     ncols.times do |j| v[j] = Vector.new(nrows, p + j*nrows*8).sum end

@@ -266,6 +266,8 @@ class DataFrame
     end
   end
   # Projects self into columns selected by _J
+  #
+  # @param _J indices Array.
   def project(*_J)
     DataFrame.new(@rows, rownames: @rownames, colnames: colnames(_J))
   end

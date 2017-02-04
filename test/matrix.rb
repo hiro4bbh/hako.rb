@@ -63,14 +63,16 @@ class TestMatrix < MiniTest::Test
     assert_equal Matrix[[1.0,2.0],[3.0,4.0]], _A
     assert_equal Matrix[[4.0,3.0],[2.0,1.0]], _B
   end
-  def test_collect
+  def test_select_project
     _A = Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]]
-    assert_equal Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.collect_columns([0,1,2])
-    assert_equal Matrix[[2.0,3.0,1.0],[5.0,6.0,4.0]], _A.collect_columns([1,2,0])
-    assert_equal Matrix[[2.0,3.0],[5.0,6.0]], _A.collect_columns([1,2])
-    assert_equal Matrix[[2.0,3.0,1.0,3.0],[5.0,6.0,4.0,6.0]], _A.collect_columns([1,2,0,2])
-    assert_equal Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.collect_rows([0,1])
-    assert_equal Matrix[[4.0,5.0,6.0],[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.collect_rows([1,0,1])
+    assert_equal Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.project(:*)
+    assert_equal Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.project([0,1,2])
+    assert_equal Matrix[[2.0,3.0,1.0],[5.0,6.0,4.0]], _A.project(1,2,0)
+    assert_equal Matrix[[2.0,3.0],[5.0,6.0]], _A.project(1,2)
+    assert_equal Matrix[[2.0,3.0,1.0,3.0],[5.0,6.0,4.0,6.0]], _A.project(1,2,0,2)
+    assert_equal Matrix[[1.0,2.0],[4.0,5.0]], _A.project(0..-2)
+    assert_equal Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.select([0,1])
+    assert_equal Matrix[[4.0,5.0,6.0],[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.select([1,0,1])
   end
   def test_diag
     _A = Matrix[[1.0,2.0],[3.0,4.0]]

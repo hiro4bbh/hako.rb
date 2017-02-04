@@ -16,7 +16,7 @@ hako.rb has the following features:
 - plot engine: under development
 
 ## How to use hako.rb?
-Currently, hako.rb is extremely unstable, so there is not gem for hako.rb
+Currently, hako.rb is extremely unstable, so there is no gem for hako.rb
 or installation scripts for deployment.
 Furthermore, hako.rb is only tested on my macOS Sierra.
 
@@ -26,6 +26,7 @@ You can use hako.rb on macOS from GitHub, as the following:
 # Get latest hako.rb from GitHub.
 git clone https://github.com/hiro4bbh/hako.rb
 cd hako.rb
+git submodule --init --recursive
 # You can use OpenBLAS optimized for your machine.
 brew install homebrew/science/openblas --build-from-source
 # Use latest Ruby (currently tested on version 2.4.0p0).
