@@ -3,6 +3,18 @@ require 'hako.rb'
 require 'minitest/autorun'
 
 class TestLinearAlgebra < MiniTest::Test
+  def test_decompose
+    def test_decompose_QRP(_A)
+      _Q, _R, pivot = decompose_QRP(_A)
+      assert_equal (_Q*_R).project(pivot.invert_array).round!(10), _A.round!(10)
+    end
+    test_decompose_QRP Matrix[[2.0,0.0],[0.0,1.0]]
+    test_decompose_QRP Matrix[[2.0,0.0],[0.0,0.0],[0.0,1.0]]
+    test_decompose_QRP Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]]
+    test_decompose_QRP Matrix[[1.0,2.0],[3.0,4.0],[5.0,6.0]]
+    test_decompose_QRP Matrix.new(3, 3)
+    test_decompose_QRP Matrix.new(3, 3).fill(1.0)
+  end
   def test_eigen_system
     _A = Matrix[[1.0,2.0,3.0],[2.0,4.0,5.0],[3.0,5.0,6.0]]
     lambdas, _V = eigen_system_symmetric(_A, with_vectors: true)
