@@ -82,6 +82,9 @@ class TestMatrix < MiniTest::Test
     assert_equal Vector[1.0,5.0], _B.diag
     assert_equal Vector[1.0,4.0], _C.diag
   end
+  def test_fill
+    assert_equal Matrix[[2.0,2.0,2.0],[2.0,2.0,2.0]], Matrix.new(2, 3).fill(2.0)
+  end
   def test_min_max
     assert_equal 2.0, Matrix[[1.0,2.0],[-1.0,2.0]].max
     assert_equal (-1.0), Matrix[[1.0,2.0],[-1.0,2.0]].min

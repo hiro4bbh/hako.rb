@@ -233,6 +233,10 @@ class Matrix
     d.length.times do |i| d[i] = self[i,i] end
     d
   end
+  def fill(value)
+    to_vector.fill(value)
+    self
+  end
   def max
     to_vector.max
   end

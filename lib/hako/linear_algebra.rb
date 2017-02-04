@@ -51,8 +51,8 @@ def eigen_values_symmetric(_A)
 end
 
 # Solve the following Weighted Least Squares problem:
-#   min_{x \in \mathbb{R}^m} (\bm{y} - A\bm{x})^\top diag(\bm{w}) (\bm{y} - A\bm{x}),
-#     Y \in \mathbb{R}^m, A: m \times n-matrix, w \in \mathbb{R}^m
+#   min_{\bm{x} \in \mathbb{R}^m} (\bm{y} - A\bm{x})^\top diag(\bm{w}) (\bm{y} - A\bm{x}),
+#     \bm{y} \in \mathbb{R}^m, A: m \times n-matrix, \bm{w} \in \mathbb{R}^m
 def solve_weighted_least_squares(y, _A, w=nil)
   raise "y must be Vector" unless y.is_a? Vector
   raise "_A must be Matrix" unless _A.is_a? Matrix
