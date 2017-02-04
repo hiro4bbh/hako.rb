@@ -32,6 +32,10 @@ class TestMatrix < MiniTest::Test
     assert_equal Matrix[[1.0,2.0]], _A.resize(1, 2)
     assert_equal Matrix[[1.0,2.0],[3.0,4.0]], _A
   end
+  def test_each
+    _A = Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]]
+    assert_equal([Vector[1.0,4.0], Vector[2.0,5.0], Vector[3.0,6.0]], _A.collect do |a| a end)
+  end
   def test_unops
     _A = Matrix[[1.0,2.0],[3.0,4.0]]
     assert_equal Matrix[[1.0,2.0],[3.0,4.0]], +_A

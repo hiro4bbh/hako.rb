@@ -1,6 +1,7 @@
 require 'ffi'
 
 class Matrix
+  include Enumerable
   attr_reader :p, :nrows, :ncols
   def initialize(nrows, ncols, p=nil)
     @p = if p then p else FFI::MemoryPointer.new(:double, nrows*ncols) end
@@ -76,6 +77,12 @@ class Matrix
     Vector.new(nrows*ncols, p)
   end
 
+  # Iterates column vectors.
+  def each
+    return to_enum unless block_given?
+    ncols.times do |j| yield Vector.new(nrows, p + j*nrows*8) end
+    self
+  end
   def [](i, j)
     raise 'i and j must be Integer' unless i.is_a? Integer and j.is_a? Integer
     i = nrows + i if i < 0

@@ -44,7 +44,10 @@ class Array
   end
 end
 
-# Decompose _A as Q * R * P, and returns (Q, R, P).
+# Decompose _A as Q * R * P, and return (Q, R, P).
+# Q is $m times \min\{m, n\}$ Matrix which consists of leading columns of
+# orthogonal matrix $Q$.
+# R is $\min\{m, n\} \times n$ upper triangular Matrix.
 # P is represented as column pivot indices Array.
 #
 # @param _A Matrix.
