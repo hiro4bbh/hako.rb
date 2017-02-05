@@ -92,9 +92,25 @@ def eigen_values_symmetric(_A)
   eigen_system_symmetric(_A, with_vectors: false)
 end
 
+# Solve the linear equation AX = B.
+#
+# @param A Matrix.
+# @param B Vector or Matrix.
+def solve_linear_equation(_A, _B)
+  raise '_A must be Matrix' unless _A.is_a? Matrix
+  raise '_B must be Vector or Matrix' unless _B.is_a? Vector or _B.is_a? Matrix
+  _Acopy, _Bcopy = _A.copy, if _B.is_a? Vector then _B.resize([_A.ncols, _B.length].max) else _B.resize([_A.ncols, _B.nrows].max, _B.ncols) end
+  jpvt = FFI::MemoryPointer.new(:int, _A.ncols)
+  rcond = 1.0e-05
+  rank = FFI::MemoryPointer.new(:int, 1)
+  info = LAPACK::dgelsy(:LAPACK_COL_MAJOR, _Acopy.nrows, _Acopy.ncols, if _Bcopy.is_a? Vector then 1 else _Bcopy.ncols end, _Acopy.p, _Acopy.nrows, _Bcopy.p, if _Bcopy.is_a? Vector then _Bcopy.length else _Bcopy.nrows end, jpvt, rcond, rank)
+  raise LAPACK::Info.new(:dgelsy, info) unless info == 0
+  if _Bcopy.is_a? Vector then _Bcopy.resize(_A.ncols) else _Bcopy.resize(_A.ncols, _Bcopy.ncols) end
+end
+
 # Solve the following Weighted Least Squares problem:
-#   min_{\bm{x} \in \mathbb{R}^m} (\bm{y} - A\bm{x})^\top diag(\bm{w}) (\bm{y} - A\bm{x}),
-#     \bm{y} \in \mathbb{R}^m, A: m \times n-matrix, \bm{w} \in \mathbb{R}^m
+#   \min_{\bm{x} \in \mathbb{R}^m} (\bm{y} - A\bm{x})^\top \diag(\bm{w}) (\bm{y} - A\bm{x}),
+#     \bm{y} \in \mathbb{R}^m, A: m \times n, \bm{w} \in \mathbb{R}^m
 #
 # @param y Vector.
 # @param _A Matrix.
@@ -111,10 +127,26 @@ def solve_weighted_least_squares(y, _A, w=nil)
   else
     [if y.length < _A.ncols then y.resize(_A.ncols) else y.copy end, _A.copy]
   end
-  jpvt = FFI::MemoryPointer.new(:int, _A.ncols)
-  rcond = 1.0e-05
-  rank = FFI::MemoryPointer.new(:int, 1)
-  info = LAPACK::dgelsy(:LAPACK_COL_MAJOR, _Acopy.nrows, _Acopy.ncols, 1, _Acopy.p, _Acopy.nrows, ycopy.p, ycopy.length, jpvt, rcond, rank)
-  raise LAPACK::Info.new(:dgelsy, info) unless info == 0
-  ycopy.resize(_A.ncols)
+  return solve_linear_equation(_Acopy, ycopy)
+end
+
+# Solve the following multiple Weighted Least Squares problem for k = 1,\ldots,K:
+#   \min_{\bm{x}_k \in \mathbb{R}^m} (\bm{y}_k - A\bm{x})^\top \diag(\bm{w}_k) (\bm{y}_k - A\bm{x}),
+#     Y := (\bm{y}_1,\ldots,\bm{y}_K): m \times K, A: m \times n,
+#     W := (\bm{w}_1,\ldots,\bm{w}_K): m \times K
+#
+# @param _Y Matrix
+# @param _A Matrix
+# @param _W Matrix if set
+def solve_multiple_weighted_least_squares(_Y, _A, _W=nil)
+  raise "_Y must be Matrix" unless _Y.is_a? Matrix
+  raise "_A must be Matrix" unless _A.is_a? Matrix
+  raise "number of rows of _Y and A must be equal" unless _Y.nrows == _A.nrows
+  _W ||= Matrix.new(_Y.nrows, _Y.ncols).fill(1.0)
+  raise "_W must be Matrix" unless _W.is_a? Matrix
+  raise "number of rows of w and y must be equal" unless _W.nrows == _Y.nrows
+  raise "number of columns of w and y must be equal" unless _W.ncols == _Y.ncols
+  Matrix.new(_A.ncols, _Y.ncols).each.with_index do |x, j|
+    x.fill(solve_weighted_least_squares(_Y.project(j).to_vector, _A, _W.project(j).to_vector))
+  end
 end

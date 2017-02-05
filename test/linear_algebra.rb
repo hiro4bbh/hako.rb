@@ -38,4 +38,14 @@ class TestLinearAlgebra < MiniTest::Test
     assert_equal Vector[0.11656,2.03155,-0.00038,0.27820], solve_weighted_least_squares(life_cycle_savings_sr, life_cycle_savings_covariates, (1..(life_cycle_savings.nrows)).to_a.to_vector).round(5)
     assert_equal Vector[0.11745,2.04208,-0.00041,0.26980], solve_weighted_least_squares(life_cycle_savings_sr, life_cycle_savings_covariates, (0..(life_cycle_savings.nrows - 1)).to_a.to_vector).round(5)
   end
+  def test_solve_multiple_weighted_least_squares
+    roller_weight = Vector[1.9,3.1,3.3,4.8,5.3,6.1,6.4,7.6,9.8,12.4]
+    roller_intercept_depression = Matrix[[1,1,1,1,1,1,1,1,1,1],[2,1,5,5,20,20,23,10,30,25]].t
+    assert_equal Matrix[[2.66233],[0.24168]], solve_multiple_weighted_least_squares((roller_weight.to_a).to_vector.to_matrix(10, 1), roller_intercept_depression).round(5)
+    assert_equal Matrix[[2.66233],[0.24168]], solve_multiple_weighted_least_squares((roller_weight.to_a).to_vector.to_matrix(10, 1), roller_intercept_depression, [[2.0]*10].to_matrix.t).round(5)
+    w = [(1..10).to_a].to_matrix.t.power_elements(0.5, 0.0)
+    assert_equal Matrix[[3.29946],[0.23199]], solve_multiple_weighted_least_squares((roller_weight.to_a).to_vector.to_matrix(10, 1).mul_rows(w.to_vector), roller_intercept_depression.mul_rows(w.to_vector)).round(5)
+    assert_equal Matrix[[3.29946],[0.23199]], solve_multiple_weighted_least_squares((roller_weight.to_a).to_vector.to_matrix(10, 1), roller_intercept_depression, [(1..10).to_a].to_matrix.t).round(5)
+    assert_equal Matrix[[2.66233,0.24168],[3.29946,0.23199],[3.63323,0.22060]].t, solve_multiple_weighted_least_squares((roller_weight.to_a*3).to_vector.to_matrix(10, 3), roller_intercept_depression, [[1.0]*10, (1..10).to_a, (0..9).to_a].to_matrix.t).round(5)
+  end
 end

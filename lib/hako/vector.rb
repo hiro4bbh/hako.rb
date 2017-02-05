@@ -58,9 +58,21 @@ class Vector
     value
   end
 
+  # Fills self with value.
+  # If value is Vector, it must be same length with self.
+  #
+  # @param value Vector or Numeric.
   def fill(value)
-    self[0] = value
-    LibC::memset_pattern8(p + 8, p, (length - 1)*8)
+    case value
+    when Vector then
+      raise 'length of self and value must be same' unless length == value.length
+      p.__copy_from__(value.p, length*8)
+    when Numeric then
+      self[0] = value
+      LibC::memset_pattern8(p + 8, p, (length - 1)*8)
+    else
+      raise 'value must be Vector or Numeric'
+    end
     self
   end
 

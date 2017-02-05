@@ -62,6 +62,7 @@ class TestVector < MiniTest::Test
   end
   def test_fill
     assert_equal Vector[2.0,2.0,2.0,2.0], Vector.new(4).fill(2.0)
+    assert_equal Vector[1.0,2.0,3.0,4.0], Vector.new(4).fill(Vector[1.0,2.0,3.0,4.0])
   end
   def test_min_max
     assert_equal 2.0, Vector[1.0,2.0,-2.0,1.0].max
