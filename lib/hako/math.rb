@@ -40,18 +40,13 @@ class Matrix
   # Do softmax on rows in self.
   def softmax_rows!
     # This code is optimized with internal manipulation.
+    max_x = rowmaxs
+    each do |x| x.sub!(max_x) end
     i = 0
     while i < nrows do
       o, endo = i*8, (i + ncols*nrows)*8
-      max_z = p.get_float64(o)
       while o < endo do
-        x = p.get_float64(o)
-        max_z = x if max_z < x
-        o += nrows*8
-      end
-      o, endo = i*8, (i + ncols*nrows)*8
-      while o < endo do
-        p.put_float64(o, Math::exp(p.get_float64(o) - max_z))
+        p.put_float64(o, Math::exp(p.get_float64(o)))
         o += nrows*8
       end
       i += 1

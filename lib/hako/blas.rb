@@ -28,6 +28,11 @@ module BLAS
     :CblasLeft, 141, :CblasRight,
   ]
 
+  # double BLASFUNC(dmax)  (blasint *, double *, blasint *);
+  attach_function :dmax, :dmax_, [:pointer, :pointer, :pointer], :double
+  # double BLASFUNC(dmin)  (blasint *, double *, blasint *);
+  attach_function :dmin, :dmin_, [:pointer, :pointer, :pointer], :double
+
   # double cblas_dasum (OPENBLAS_CONST blasint n, OPENBLAS_CONST double *x, OPENBLAS_CONST blasint incx);
   attach_function :dasum, :cblas_dasum, [:blasint, :pointer, :blasint], :double
   # void cblas_daxpy(OPENBLAS_CONST blasint n, OPENBLAS_CONST double alpha, OPENBLAS_CONST double *x, OPENBLAS_CONST blasint incx, double *y, OPENBLAS_CONST blasint incy);

@@ -92,6 +92,10 @@ class TestMatrix < MiniTest::Test
   def test_min_max
     assert_equal 2.0, Matrix[[1.0,2.0],[-1.0,2.0]].max
     assert_equal (-1.0), Matrix[[1.0,2.0],[-1.0,2.0]].min
+    assert_equal Vector[1.0,2.0,3.0], Matrix[[1.0,2.0,3.0],[-1.0,2.0,-2.0]].colmaxs
+    assert_equal Vector[-1.0,2.0,-2.0], Matrix[[1.0,2.0,3.0],[-1.0,2.0,-2.0]].colmins
+    assert_equal Vector[3.0,2.0], Matrix[[1.0,2.0,3.0],[-1.0,2.0,-2.0]].rowmaxs
+    assert_equal Vector[1.0,-2.0], Matrix[[1.0,2.0,3.0],[-1.0,2.0,-2.0]].rowmins
   end
   def test_round
     _A = Matrix[[1.0,2.00001],[3.000002,4.000007]]

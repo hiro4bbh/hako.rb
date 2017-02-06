@@ -166,15 +166,19 @@ class Vector
   end
   def max
     return Float::NAN if length == 0
-    x = self[0]
-    1.upto(length - 1).each do |i| x = self[i] if x < self[i] end
-    x
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [length].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [1].pack('i*'))
+    BLAS::dmax(i1, self.p, i2)
   end
   def min
     return Float::NAN if length == 0
-    x = self[0]
-    1.upto(length - 1).each do |i| x = self[i] if x > self[i] end
-    x
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [length].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [1].pack('i*'))
+    BLAS::dmin(i1, self.p, i2)
   end
   def rank1op(v)
     _A = Matrix.new(length, v.length)

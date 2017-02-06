@@ -230,9 +230,39 @@ class Matrix
     _A
   end
 
+  def colmaxs
+    v = Vector.new(ncols)
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [nrows].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [1].pack('i*'))
+    j, jend = 0, ncols*8
+    while j < jend do
+      v.p.put_float64(j, BLAS::dmax(i1, self.p + j*nrows, i2))
+      j += 8
+    end
+    v
+  end
+  def colmins
+    v = Vector.new(ncols)
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [nrows].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [1].pack('i*'))
+    j, jend = 0, ncols*8
+    while j < jend do
+      v.p.put_float64(j, BLAS::dmin(i1, self.p + j*nrows, i2))
+      j += 8
+    end
+    v
+  end
   def colsums
     v = Vector.new(ncols)
-    ncols.times do |j| v[j] = Vector.new(nrows, p + j*nrows*8).sum end
+    j, jend = 0, ncols*8
+    while j < jend do
+      v.p.put_float64(j, Vector.new(nrows, p + j*nrows).sum)
+      j += 8
+    end
     v
   end
   def diag
@@ -257,7 +287,33 @@ class Matrix
     to_vector.round!(ndigits)
     self
   end
+  def rowmaxs
+    v = Vector.new(nrows)
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [ncols].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [nrows].pack('i*'))
+    i, iend = 0, nrows*8
+    while i < iend do
+      v.p.put_float64(i, BLAS::dmax(i1, self.p + i, i2))
+      i += 8
+    end
+    v
+  end
+  def rowmins
+    v = Vector.new(nrows)
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [ncols].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [nrows].pack('i*'))
+    i, iend = 0, nrows*8
+    while i < iend do
+      v.p.put_float64(i, BLAS::dmin(i1, self.p + i, i2))
+      i += 8
+    end
+    v
+  end
   def rowsums
-    (self * Vector.new(ncols).fill(1.0)).to_vector
+    (self*Vector.new(ncols).fill(1.0)).to_vector
   end
 end
