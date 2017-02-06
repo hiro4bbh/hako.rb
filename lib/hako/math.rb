@@ -3,6 +3,7 @@ require 'hako/data_frame'
 module LIBMATH
   extend FFI::Library
   ffi_lib File.join(File.dirname(__FILE__), '../.build/libmath.dylib')
+  attach_function :dsign, [:int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int], :void
   attach_function :dexp, [:int, :pointer, :int], :void
 end
 
@@ -13,6 +14,37 @@ class Float
   end
 end
 
+# Return element-wise substitution if c > 0 then p else if c == 0 then z
+# else n.
+#
+# @param c Vector or Matrix.
+# @param p Vector, Matrix or Numeric.
+# @param z Vector, Matrix or Numeric.
+# @param n Vector, Matrix or Numeric.
+def sign(c, p, z, n)
+  raise 'c must be Vector or Matrix' unless c.is_a? Vector or c.is_a? Matrix
+  raise 'p must be Vector, Matrix or Numeric' unless p.is_a? Vector or p.is_a? Matrix or p.is_a? Numeric
+  raise 'z must be Vector, Matrix or Numeric' unless z.is_a? Vector or z.is_a? Matrix or z.is_a? Numeric
+  raise 'n must be Vector, Matrix or Numeric' unless n.is_a? Vector or n.is_a? Matrix or n.is_a? Numeric
+  x = if c.is_a? Vector then Vector.new(c.length) else Matrix.new(c.nrows, c.ncols) end
+  c = c.to_vector
+  p = p.to_vector unless p.is_a? Numeric
+  z = z.to_vector unless z.is_a? Numeric
+  n = n.to_vector unless n.is_a? Numeric
+  raise 'size of c and p must be equal' unless p.is_a? Numeric or c.length == p.length
+  raise 'size of c and z must be equal' unless z.is_a? Numeric or c.length == z.length
+  raise 'size of c and n must be equal' unless n.is_a? Numeric or c.length == n.length
+  LIBMATH::dsign(
+    x.length, x.p, 1, c.p, 1,
+    if p.is_a? Numeric then Vector[p].p else p.p end, if p.is_a? Numeric then 0 else 1 end,
+    if z.is_a? Numeric then Vector[z].p else z.p end, if z.is_a? Numeric then 0 else 1 end,
+    if n.is_a? Numeric then Vector[n].p else n.p end, if n.is_a? Numeric then 0 else 1 end)
+  x
+end
+
+# Return exp(v) element-wisely.
+#
+# @param v Vector
 def exp(v)
   raise 'v must be Vector' unless v.is_a? Vector
   LIBMATH::dexp(v.length, v.p, 1)
