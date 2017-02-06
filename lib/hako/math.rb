@@ -1,10 +1,21 @@
 require 'hako/data_frame'
 
+module LIBMATH
+  extend FFI::Library
+  ffi_lib File.join(File.dirname(__FILE__), '../.build/libmath.dylib')
+  attach_function :dexp, [:int, :pointer, :int], :void
+end
+
 class Float
   # Returns self/y unless y == 0, or returns +-inf.
   def divorinf(y)
     if y == 0 then (if self > 0 then 1 else -1 end)*Float::INFINITY else self/y end
   end
+end
+
+def exp(v)
+  raise 'v must be Vector' unless v.is_a? Vector
+  LIBMATH::dexp(v.length, v.p, 1)
 end
 
 class Array
@@ -42,15 +53,7 @@ class Matrix
     # This code is optimized with internal manipulation.
     max_x = rowmaxs
     each do |x| x.sub!(max_x) end
-    i = 0
-    while i < nrows do
-      o, endo = i*8, (i + ncols*nrows)*8
-      while o < endo do
-        p.put_float64(o, Math::exp(p.get_float64(o)))
-        o += nrows*8
-      end
-      i += 1
-    end
+    exp(to_vector)
     mul_rows!(rowsums.power_elements(-1.0))
   end
   # (see #softmax_rows!)
