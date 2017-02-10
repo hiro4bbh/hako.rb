@@ -48,7 +48,4 @@ module BLAS
   attach_function :dnrm2, :cblas_dnrm2, [:blasint, :pointer, :blasint], :double
   # void cblas_dscal(OPENBLAS_CONST blasint N, OPENBLAS_CONST double alpha, double *X, OPENBLAS_CONST blasint incX);
   attach_function :dscal, :cblas_dscal, [:blasint, :double, :pointer, :blasint], :void
-  # void cblas_dtbmv(OPENBLAS_CONST enum CBLAS_ORDER order, OPENBLAS_CONST enum CBLAS_UPLO Uplo, OPENBLAS_CONST enum CBLAS_TRANSPOSE TransA, OPENBLAS_CONST enum CBLAS_DIAG Diag,
-  #                  OPENBLAS_CONST blasint N, OPENBLAS_CONST blasint K, OPENBLAS_CONST double *A, OPENBLAS_CONST blasint lda, double *X, OPENBLAS_CONST blasint incX);
-  attach_function :dtbmv, :cblas_dtbmv, [:CBLAS_ORDER, :CBLAS_UPLO, :CBLAS_TRANSPOSE, :CBLAS_DIAG, :blasint, :blasint, :pointer, :blasint, :pointer, :blasint], :void
 end

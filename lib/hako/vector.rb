@@ -129,9 +129,7 @@ class Vector
       BLAS::dscal(length, y, p, 1)
     elsif y.is_a? Vector then
       raise "self and y must have same length" unless self.length == y.length
-      BLAS::dtbmv(
-        :CblasColMajor, :CblasUpper, :CblasNoTrans, :CblasNonUnit,
-        length, 0, y.p, 1, p, 1)
+      LIBMATH::dhad(length, p, 1, y.p, 1)
     else
       raise "y must be Numeric or Vector"
     end

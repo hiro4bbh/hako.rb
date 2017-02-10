@@ -1,5 +1,22 @@
 #include <math.h>
 
+void dexp(int length, double *x, int skip)
+{
+	int i;
+	for (i = 0; i < length; i += skip) {
+		x[i] = exp(x[i]);
+	}
+}
+
+void dhad(int length, double *x, int xskip, double *y, int yskip)
+{
+	int xi, yi = 0;
+	for (xi = 0; xi < length; xi += xskip) {
+		x[xi] *= y[yi];
+		yi += yskip;
+	}
+}
+
 void dsign(unsigned int xlength, double *x, int xskip, double *c, int cskip, double *p, int pskip, double *z, int zskip, double *n, int nskip)
 {
 	int xi, ci = 0, pi = 0, zi = 0, ni = 0;
@@ -15,13 +32,5 @@ void dsign(unsigned int xlength, double *x, int xskip, double *c, int cskip, dou
 		pi += pskip;
 		zi += zskip;
 		ni += nskip;
-	}
-}
-
-void dexp(int length, double *x, int skip)
-{
-	int i;
-	for (i = 0; i < length; i += skip) {
-		x[i] = exp(x[i]);
 	}
 }

@@ -3,8 +3,9 @@ require 'hako/data_frame'
 module LIBMATH
   extend FFI::Library
   ffi_lib File.join(File.dirname(__FILE__), '../.build/libmath.dylib')
-  attach_function :dsign, [:int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int], :void
   attach_function :dexp, [:int, :pointer, :int], :void
+  attach_function :dhad, [:int, :pointer, :int, :pointer, :int], :void
+  attach_function :dsign, [:int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int], :void
 end
 
 class Float
