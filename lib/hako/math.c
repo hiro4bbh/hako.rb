@@ -1,19 +1,29 @@
 #include <math.h>
 
-void dexp(int length, double *x, int skip)
+void dexp(int xlength, double *x, int skip)
 {
 	int i;
-	for (i = 0; i < length; i += skip) {
+	for (i = 0; i < xlength; i += skip) {
 		x[i] = exp(x[i]);
 	}
 }
 
-void dhad(int length, double *x, int xskip, double *y, int yskip)
+void dhad(int xlength, double *x, int xskip, double *y, int yskip)
 {
 	int xi, yi = 0;
-	for (xi = 0; xi < length; xi += xskip) {
+	for (xi = 0; xi < xlength; xi += xskip) {
 		x[xi] *= y[yi];
 		yi += yskip;
+	}
+}
+
+void dpow(unsigned int xlength, double *x, int xskip, double y, double non_finite_alt)
+{
+	int xi;
+	double z;
+	for (xi = 0; xi < xlength; xi += xskip) {
+		z = pow(x[xi], y);
+		x[xi] = isfinite(z) ? z : non_finite_alt;
 	}
 }
 

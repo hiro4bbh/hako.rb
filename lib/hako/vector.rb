@@ -142,15 +142,12 @@ class Vector
     raise "y must be Numeric" unless y.is_a? Numeric
     self.hadamard!(y)
   end
-  def power_elements!(alpha, non_finite=Float::NAN)
-    length.times do |i|
-      x = self[i]**alpha
-      self[i] = if x.finite? then x else non_finite end
-    end
+  def power_elements!(alpha, non_finite_alt=Float::NAN)
+    LIBMATH::dpow(length, p, 1, alpha, non_finite_alt)
     self
   end
-  def power_elements(alpha, non_finite=Float::NAN)
-    self.copy.power_elements!(alpha, non_finite)
+  def power_elements(alpha, non_finite_alt=Float::NAN)
+    copy.power_elements!(alpha, non_finite_alt)
   end
   def sub!(y)
     add!(-y)

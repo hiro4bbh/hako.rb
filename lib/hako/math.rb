@@ -5,6 +5,7 @@ module LIBMATH
   ffi_lib File.join(File.dirname(__FILE__), '../.build/libmath.dylib')
   attach_function :dexp, [:int, :pointer, :int], :void
   attach_function :dhad, [:int, :pointer, :int, :pointer, :int], :void
+  attach_function :dpow, [:int, :pointer, :int, :double, :double], :void
   attach_function :dsign, [:int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int, :pointer, :int], :void
 end
 
@@ -13,6 +14,14 @@ class Float
   def divorinf(y)
     if y == 0 then (if self > 0 then 1 else -1 end)*Float::INFINITY else self/y end
   end
+end
+
+# Return exp(v) element-wisely.
+#
+# @param v Vector
+def exp(v)
+  raise 'v must be Vector' unless v.is_a? Vector
+  LIBMATH::dexp(v.length, v.p, 1)
 end
 
 # Return element-wise substitution if c > 0 then p else if c == 0 then z
@@ -41,14 +50,6 @@ def sign(c, p, z, n)
     if z.is_a? Numeric then Vector[z].p else z.p end, if z.is_a? Numeric then 0 else 1 end,
     if n.is_a? Numeric then Vector[n].p else n.p end, if n.is_a? Numeric then 0 else 1 end)
   x
-end
-
-# Return exp(v) element-wisely.
-#
-# @param v Vector
-def exp(v)
-  raise 'v must be Vector' unless v.is_a? Vector
-  LIBMATH::dexp(v.length, v.p, 1)
 end
 
 class Array
