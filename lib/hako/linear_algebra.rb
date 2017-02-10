@@ -13,19 +13,19 @@ class Float
   alias old_div /
   def +(y)
     return y + self if y.is_a? Matrix or y.is_a? Vector
-    return old_add(y)
+    old_add(y)
   end
   def -(y)
     return (-y).add!(self) if y.is_a? Matrix or y.is_a? Vector
-    return old_sub(y)
+    old_sub(y)
   end
   def *(y)
-    return y * self if y.is_a? Matrix or y.is_a? Vector
-    return old_mul(y)
+    return y*self if y.is_a? Matrix or y.is_a? Vector
+    old_mul(y)
   end
   def /(y)
     return y.power_elements(-1).hadamard!(self) if y.is_a? Matrix or y.is_a? Vector
-    return old_div(y)
+    old_div(y)
   end
 end
 

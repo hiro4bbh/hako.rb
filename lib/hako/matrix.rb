@@ -136,6 +136,13 @@ class Matrix
     self.to_vector.add!(if y.is_a? Numeric then y else y.to_vector end)
     self
   end
+  def add_ay!(a, y)
+    to_vector.add_ay!(a, if y.is_a? Numeric then y else y.to_vector end)
+    self
+  end
+  def add_ay(a, y)
+    copy.add_ay!(a, y)
+  end
   def div!(y)
     raise "y must be Numeric" unless y.is_a? Numeric
     to_vector.div!(y)
@@ -170,7 +177,7 @@ class Matrix
     copy.power_elements!(alpha, non_finite_alt)
   end
   def sub!(y)
-    add!(-y)
+    add_ay!(-1.0, y)
   end
   def t
     selft = Matrix::new(ncols, nrows)

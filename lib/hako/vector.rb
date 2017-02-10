@@ -83,10 +83,10 @@ class Vector
     self*(-1)
   end
   def +(y)
-    self.copy.add!(y)
+    copy.add!(y)
   end
   def -(y)
-    self.copy.add!(-y)
+    copy.sub!(y)
   end
   def *(y)
     if y.is_a? Matrix then
@@ -95,7 +95,7 @@ class Vector
       BLAS::dgemm(:CblasColMajor, :CblasTrans, :CblasNoTrans, y.ncols, 1, y.nrows, 1.0, y.p, y.nrows, p, length, 0.0, v.p, v.length)
       v
     else
-      self.copy.hadamard!(y)
+      copy.hadamard!(y)
     end
   end
   def /(y)
@@ -115,6 +115,16 @@ class Vector
       raise "y must be Numeric or Vector"
     end
     self
+  end
+  def add_ay!(a, y)
+    raise 'a must be Numeric' unless a.is_a? Numeric
+    return add!(a*y) if y.is_a? Numeric
+    raise 'y must be Vector whose length is length of self' unless y.is_a? Vector and y.length == length
+    BLAS::daxpy(length, a, y.p, 1, p, 1)
+    self
+  end
+  def add_ay(a, y)
+    copy.add_ay!(a, y)
   end
   def div!(y)
     raise "y must be Numeric" unless y.is_a? Numeric
@@ -150,7 +160,7 @@ class Vector
     copy.power_elements!(alpha, non_finite_alt)
   end
   def sub!(y)
-    add!(-y)
+    add_ay!(-1.0, y)
   end
 
   def l1norm
