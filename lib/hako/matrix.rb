@@ -287,6 +287,14 @@ class Matrix
   def min
     to_vector.min
   end
+  def imax
+    idx = to_vector.imax
+    if idx == -1 then [-1, -1] else [idx%nrows, idx/nrows] end
+  end
+  def imin
+    idx = to_vector.imin
+    if idx == -1 then [-1, -1] else [idx%nrows, idx/nrows] end
+  end
   def round(ndigits=0)
     copy.round!(ndigits)
   end

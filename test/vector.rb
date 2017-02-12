@@ -67,8 +67,12 @@ class TestVector < MiniTest::Test
   def test_min_max
     assert_equal 2.0, Vector[1.0,2.0,-2.0,1.0].max
     assert_equal (-2.0), Vector[1.0,2.0,-2.0,1.0].min
+    assert_equal 1, Vector[1.0,2.0,-2.0,1.0].imax
+    assert_equal 2, Vector[1.0,2.0,-2.0,1.0].imin
     assert_equal 'NaN', Vector[].max.to_s
     assert_equal 'NaN', Vector[].min.to_s
+    assert_equal -1, Vector[].imax
+    assert_equal -1, Vector[].imin
   end
   def test_norm
     assert_equal 6.0, Vector[1.0,-2.0,3.0].l1norm

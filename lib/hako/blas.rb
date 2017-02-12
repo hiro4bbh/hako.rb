@@ -69,6 +69,10 @@ module BLAS
   attach_function :dmax, :dmax_, [:pointer, :pointer, :pointer], :double
   # double BLASFUNC(dmin)  (blasint *, double *, blasint *);
   attach_function :dmin, :dmin_, [:pointer, :pointer, :pointer], :double
+  # blasint    blasfunc(idmax) (blasint *, double *, blasint *);
+  attach_function :idmax, :idmax_, [:pointer, :pointer, :pointer], :blasint
+  # blasint    blasfunc(idmin) (blasint *, double *, blasint *);
+  attach_function :idmin, :idmin_, [:pointer, :pointer, :pointer], :blasint
 
   # double cblas_dasum (OPENBLAS_CONST blasint n, OPENBLAS_CONST double *x, OPENBLAS_CONST blasint incx);
   attach_function :dasum, :cblas_dasum, [:blasint, :pointer, :blasint], :double

@@ -185,6 +185,22 @@ class Vector
     i2.put_bytes(0, [1].pack('i*'))
     BLAS::dmin(i1, self.p, i2)
   end
+  def imax
+    return -1 if length == 0
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [length].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [1].pack('i*'))
+    BLAS::idmax(i1, self.p, i2) - 1
+  end
+  def imin
+    return -1 if length == 0
+    i1 = FFI::MemoryPointer.new(:int, 1)
+    i1.put_bytes(0, [length].pack('i*'))
+    i2 = FFI::MemoryPointer.new(:int, 1)
+    i2.put_bytes(0, [1].pack('i*'))
+    BLAS::idmin(i1, self.p, i2) - 1
+  end
   def rank1op(v)
     _A = Matrix.new(length, v.length)
     BLAS::dger(:CblasColMajor, length, v.length, 1.0, p, 1, v.p, 1, _A.p, _A.nrows)
