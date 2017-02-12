@@ -26,7 +26,7 @@ class String
   def cyan
     "\033[36m#{self}\033[0m"
   end
-  def white
+  def gray
     "\033[37m#{self}\033[0m"
   end
 end
@@ -78,5 +78,6 @@ require 'irb/completion'
 def start_hako_shell
   puts "#{$HAKO_SHELL_NAME}#{unless $HAKO_SHELL_NAME == 'hako.rb' then ' (powered by hako.rb)' end} interactive shell".purple.bold
   puts "running on #{RUBY_DESCRIPTION}".red
+  puts "with #{BLAS::get_configure_string}".cyan
   IRB.start($HAKO_HELL_NAME)
 end

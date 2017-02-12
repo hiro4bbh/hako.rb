@@ -6,6 +6,43 @@ module BLAS
   extend FFI::Library
   ffi_lib $HAKO_LIBBLAS_PATH
 
+  # /*Get the number of threads on runtime.*/
+  # int openblas_get_num_threads(void);
+  attach_function :get_number_of_threads, :openblas_get_num_threads, [], :int
+
+  # /*Get the number of physical processors (cores).*/
+  # int openblas_get_num_procs(void);
+  attach_function :get_number_of_processors, :openblas_get_num_procs, [], :int
+
+  # /*Get the build configure on runtime.*/
+  # char* openblas_get_config(void);
+  attach_function :get_config, :openblas_get_config, [], :pointer
+
+  # /* Get the parallelization type which is used by OpenBLAS */
+  # int openblas_get_parallel(void);
+  # /* OpenBLAS is compiled for sequential use  */
+  # #define OPENBLAS_SEQUENTIAL  0
+  # /* OpenBLAS is compiled using normal threading model */
+  # #define OPENBLAS_THREAD  1
+  # /* OpenBLAS is compiled using OpenMP threading model */
+  # #define OPENBLAS_OPENMP 2
+  enum :OPENBLAS_PARALLEL, [
+    :OPENBLAS_SEQUENTIAL, 0, :OPENBLAS_THREAD, :OPENBLAS_OPENMP,
+  ]
+  attach_function :get_parallel, :openblas_get_parallel, [], :OPENBLAS_PARALLEL
+
+  def BLAS::get_configure
+    {
+      :nthreads => get_number_of_threads, :nprocs => get_number_of_processors,
+      :config => get_config.get_string(0),
+      :parallel => get_parallel,
+    }
+  end
+  def BLAS::get_configure_string
+    config = get_configure
+    "OpenBLAS (config: #{config[:config].inspect}, parallel: #{config[:parallel]}, nprocs: #{config[:nprocs]}, nthreads: #{config[:nthreads]})"
+  end
+
   typedef :int, :blasint
   # typedef enum CBLAS_ORDER     {CblasRowMajor=101, CblasColMajor=102} CBLAS_ORDER;
   enum :CBLAS_ORDER, [
