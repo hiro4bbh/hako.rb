@@ -36,4 +36,4 @@ gem install ffi
 ```
 
 You can see yardoc at http://www.rubydoc.info/github/hiro4bbh/hako.rb .
-__WARNING: yardoc has many bug for hako.rb documentation, be careful!!__
+__WARNING: yardoc has many bugs for hako.rb documentation, be careful!!__

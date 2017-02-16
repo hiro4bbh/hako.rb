@@ -57,6 +57,18 @@ class Vector
     p.put_float64(idx*8, value)
     value
   end
+  # Returns a slice of self.
+  #
+  # first the start index of slice.
+  # last the length of slice.
+  def slice(first, len)
+    first = length + first if first < 0
+    raise 'first must be valid index' unless 0 <= first and first < length
+    last = first + len - 1
+    raise 'last must be valid index' unless 0 <= last and last < length
+    raise 'first must be less than or equal to last' unless first <= last
+    Vector.new(last - first + 1, p + first*8)
+  end
 
   # Fills self with value.
   # If value is Vector, it must be same length with self.

@@ -78,6 +78,14 @@ class TestMatrix < MiniTest::Test
     assert_equal Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.select([0,1])
     assert_equal Matrix[[4.0,5.0,6.0],[1.0,2.0,3.0],[4.0,5.0,6.0]], _A.select([1,0,1])
   end
+  def test_slice_columns
+    _A = Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]]
+    assert_equal Vector[3.0,6.0], _A.slice_columns(2)
+    assert_equal Vector[2.0,5.0], _A.slice_columns(-2)
+    assert_equal Matrix[[1.0,2.0],[4.0,5.0]], _A.slice_columns(0..-2)
+    _A.slice_columns(0..-2)[1,1] = 1.0
+    assert_equal Matrix[[1.0,2.0,3.0],[4.0,1.0,6.0]], _A
+  end
   def test_diag
     _A = Matrix[[1.0,2.0],[3.0,4.0]]
     _B = Matrix[[1.0,2.0,3.0],[4.0,5.0,6.0]]

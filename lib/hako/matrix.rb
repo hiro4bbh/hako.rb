@@ -236,6 +236,24 @@ class Matrix
     _J.each.with_index do |j, jo| (_A.p + jo*_A.nrows*8).__copy_from__(p + j*nrows*8, nrows*8) end
     _A
   end
+  # Returns a slice of the subsequent columns selected by _J.
+  #
+  # @param _J Integer or Range.
+  def slice_columns(_J)
+    case _J
+    when Integer then
+      _J = ncols + _J if _J < 0
+      raise '_J must be valid column index' unless 0 <= _J and _J < ncols
+      to_vector.slice(_J*nrows, nrows)
+    when Range then
+      first = if _J.first < 0 then ncols + _J.first else _J.first end
+      last = if _J.last < 0 then ncols + _J.last else _J.last end
+      raise 'first must be valid column index' unless 0 <= first and first < ncols
+      raise 'last must be valid column index' unless 0 <= last and last < ncols
+      to_vector.slice(first*nrows, (last - first + 1)*nrows).to_matrix(nrows, last - first + 1)
+    else raise '_J must be Integer or Range'
+    end
+  end
 
   def colmaxs
     v = Vector.new(ncols)

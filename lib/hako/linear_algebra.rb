@@ -147,6 +147,6 @@ def solve_multiple_weighted_least_squares(_Y, _A, _W=nil)
   raise "number of rows of w and y must be equal" unless _W.nrows == _Y.nrows
   raise "number of columns of w and y must be equal" unless _W.ncols == _Y.ncols
   Matrix.new(_A.ncols, _Y.ncols).each.with_index do |x, j|
-    x.fill(solve_weighted_least_squares(_Y.project(j).to_vector, _A, _W.project(j).to_vector))
+    x.fill(solve_weighted_least_squares(_Y.slice_columns(j).to_vector, _A, _W.slice_columns(j).to_vector))
   end
 end

@@ -32,6 +32,12 @@ class TestVector < MiniTest::Test
     assert_equal Vector[1.0], v.resize(1, 1.0)
     assert_equal Vector[1.0,2.0], v
   end
+  def test_slice
+    v = Vector[1.0,2.0,3.0,4.0]
+    assert_equal Vector[2.0,3.0,4.0], v.slice(1, 3)
+    v.slice(1, 3)[0] = 1.0
+    assert_equal Vector[1.0,1.0,3.0,4.0], v
+  end
   def test_unops
     v = Vector[1.0,2.0,3.0,4.0]
     assert_equal Vector[1.0,2.0,3.0,4.0], +v
