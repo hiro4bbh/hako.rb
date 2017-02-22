@@ -1,3 +1,4 @@
+require 'set'
 require 'zlib'
 
 require 'hako/linear_algebra'
@@ -240,6 +241,23 @@ class OrderedHash
     raise "#{oldkey.inspect} not found" unless @h[oldkey]
     @keys[@keys.index(oldkey)] = newkey
     newkey
+  end
+end
+
+class SortedSet
+  # Return the Array of keys.
+  def keys
+    to_a
+  end
+  # Return the inverted Hash mapping a key Object to the corresponding
+  # index in sorted order.
+  def invert
+    unless (@invert_map_keys ||= nil) === keys then
+      @invert_map_keys = keys
+      @invert_map = {}
+      @invert_map_keys.each.with_index do |key, i| @invert_map[key] = i end
+    end
+    @invert_map
   end
 end
 

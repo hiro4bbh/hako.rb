@@ -77,7 +77,7 @@ class Matrix
     Vector.new(nrows*ncols, p)
   end
 
-  # Iterates column vectors.
+  # Iterate column vectors if the block is given, return Enumerator otherwise.
   def each
     return to_enum unless block_given?
     ncols.times do |j| yield Vector.new(nrows, p + j*nrows*8) end
